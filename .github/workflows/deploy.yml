@@ -1,31 +1,55 @@
-name: Build and Deploy Jekyll site
+name: Deploy Jekyll site to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main   # ✅ change if your default branch is different
+  workflow_dispatch: # manual trigger
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Ruby
+      # --------------------------
+      # Setup Ruby for Jekyll
+      # --------------------------
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
+          ruby-version: '3.4.2'   # ✅ Required for jekyll-terser
+          bundler-cache: true     # Cache installed gems
 
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
+      # --------------------------
+      # Setup Node.js for al-folio
+      # --------------------------
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Build site
+      - name: Install Node.js dependencies
+        run: npm install
+
+      # --------------------------
+      # Install Ruby gems
+      # --------------------------
+      - name: Install Ruby gems
+        run: bundle install --jobs 4 --retry 3
+
+      # --------------------------
+      # Build site with Jekyll
+      # --------------------------
+      - name: Build Jekyll site
         run: bundle exec jekyll build
 
+      # --------------------------
+      # Deploy to GitHub Pages
+      # --------------------------
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
