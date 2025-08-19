@@ -1,0 +1,22 @@
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.3.2"
+gem "bundler"
+
+# Theme and dependencies
+gem "jekyll-feed"
+gem "jekyll-sitemap"
+gem "jekyll-seo-tag"
+gem "jekyll-paginate-v2"
+gem "jekyll-archives-v2"
+gem "jekyll-scholar"
+gem "jekyll-imagemagick"
+gem "jekyll-link-attributes"
+gem "jekyll-toc"
+gem "jekyll-twitter-plugin"
+gem "jekyll-email-protect"
+gem "jekyll-get-json"
+gem "jekyll-regex-replace"
+gem "jekyll-minifier"
+gem "jekyll-terser"
+gem "jemoji"
