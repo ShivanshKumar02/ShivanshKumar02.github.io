@@ -1,161 +1,217 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shivansh Kumar | Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-white text-gray-800">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shivansh Kumar – Portfolio</title>
+    <meta name="description" content="Automation QA • IAM • DevOps CI/CD • Azure • Selenium • Robot Framework" />
 
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-orange-400 to-purple-600 text-white py-20">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center px-6">
-      <div class="flex-1">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Hello, I’m <span class="text-yellow-300">Shivansh Kumar</span></h1>
-        <p class="text-lg mb-6">Automation Test Engineer | IAM Specialist | QA Automation Lead</p>
-        <div class="flex gap-4">
-          <a href="#portfolio" class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold">View Work</a>
-          <a href="assets/Updated Resume.pdf" target="_blank" class="border px-6 py-3 rounded-lg">Download CV</a>
+    <!-- Tailwind (CDN). Configure dark mode to use the `class` strategy. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Inter font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+    <style>
+      /* smooth color transitions on theme switch */
+      html, body, .transition-theme { transition: background-color .3s ease, color .3s ease, border-color .3s ease; }
+      /* nice text selection */
+      ::selection { background: #a78bfa33; }
+    </style>
+  </head>
+
+  <body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+    <!-- ================= Header / Nav ================= -->
+    <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 bg-white/90 dark:bg-gray-900/90 border-b border-gray-200/60 dark:border-gray-800/60 transition-theme">
+      <nav class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        <a href="#home" class="font-extrabold tracking-tight text-xl">Shivansh<span class="text-purple-600">.</span></a>
+
+        <div class="flex items-center gap-2">
+          <a href="#projects" class="hidden sm:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Projects</a>
+          <a href="#experience" class="hidden sm:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Experience</a>
+          <a href="#skills" class="hidden sm:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Skills</a>
+          <a href="#contact" class="hidden sm:inline-block px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Contact</a>
+
+          <!-- Theme toggle -->
+          <button id="theme-toggle" class="ml-1 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 transition-theme" aria-label="Toggle dark mode">
+            <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="hidden"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 12.02l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zM19.16 6.76l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+            <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="hidden"><path d="M21.64 13A9 9 0 1111 2.36 7 7 0 0021.64 13z"/></svg>
+            <span class="hidden sm:inline text-sm">Theme</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ================= Hero ================= -->
+    <section id="home" class="py-16 sm:py-24" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+            Automation QA & IAM Engineer
+          </h1>
+          <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+            I design reliable test automation (Selenium, Robot Framework), integrate CI/CD (Azure DevOps, GitHub Actions), and build resilient QA pipelines for IAM platforms like SailPoint.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#projects" class="px-5 py-3 rounded-xl bg-purple-600 text-white hover:bg-purple-700">View Projects</a>
+            <a href="assets/resume.pdf" class="px-5 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800" download>Download Resume</a>
+          </div>
+        </div>
+
+        <div class="flex justify-center" data-aos="zoom-in" data-aos-delay="100">
+          <img src="assets/profile.jpg" alt="Shivansh profile photo" class="w-56 h-56 sm:w-72 sm:h-72 object-cover rounded-2xl ring-1 ring-gray-200 dark:ring-gray-800 shadow-lg" />
         </div>
       </div>
-      <div class="flex-1 mt-10 md:mt-0">
-        <img src="assets/WhatsApp Image 2024-11-29 at 14.33.22_fe478940.jpg" alt="Profile" class="rounded-full w-64 mx-auto shadow-lg border-4 border-white">
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- About Section -->
-  <section class="py-16" id="about">
-    <div class="max-w-6xl mx-auto text-center px-6">
-      <h2 class="text-3xl font-bold mb-6">About Me</h2>
-      <p class="text-lg text-gray-600">
-        4+ years of hands-on experience in QA automation testing with international exposure. Specialized in test framework
-        development using Selenium, Robot Framework, and Azure DevOps CI/CD. Proven expertise in testing different applications,
-        enhancing test stability, and reducing execution time through scalable automation strategies.
-      </p>
-    </div>
-  </section>
-
-  <!-- Skills Section -->
-  <section class="py-16 bg-gray-100" id="skills">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-12">Technical Skills</h2>
-      <div class="grid md:grid-cols-3 gap-8 text-left">
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">Automation Tools</h3>
-          <p>Selenium WebDriver, Robot Framework, POSTMAN</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">Programming</h3>
-          <p>Python, HTML, CSS, API</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">CI/CD & Test Management</h3>
-          <p>Azure DevOps (Pipelines, Repos, Test Plans, Boards, Dashboards, Wiki)</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">Frameworks</h3>
-          <p>Page Object Model, Data Driven Framework</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">Testing Types</h3>
-          <p>Functional, Regression, UAT, Integration, API</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-bold mb-2">Other Tools</h3>
-          <p>BrowserStack, Pycharm, VS Code, Git | Agile, SAFe Agile, SDLC, STLC</p>
+    <!-- ================= Skills ================= -->
+    <section id="skills" class="py-16 bg-gray-50 dark:bg-gray-950/40 border-y border-gray-100 dark:border-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8">Core Skills</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-theme" data-aos="fade-up" data-aos-delay="0">
+            <h3 class="font-semibold">Automation</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Selenium, Robot Framework, PyTest, API testing</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-theme" data-aos="fade-up" data-aos-delay="50">
+            <h3 class="font-semibold">CI/CD & DevOps</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Azure DevOps, GitHub Actions, Docker, BrowserStack</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-theme" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="font-semibold">IAM</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">SailPoint, lifecycle, access reviews, role modeling</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Experience Section -->
-  <section class="py-16" id="portfolio">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-12">Professional Experience</h2>
-      <div class="grid md:grid-cols-2 gap-8 text-left">
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-semibold mb-2">Tata Consultancy Services (2021 – Present)</h3>
-          <p class="text-gray-600">QA Automation Tester (Client: Ernst & Young) | Budapest, Hungary</p>
-          <ul class="list-disc list-inside text-gray-600 mt-3 text-sm">
-            <li>Led automation for IAM OneAccess (SailPoint) modules using Robot Framework.</li>
-            <li>Integrated test execution into Azure DevOps CI/CD pipelines.</li>
-            <li>Adopted Playwright-based Browser library for 40–50% faster execution.</li>
-            <li>Enabled video-recorded executions with BrowserStack.</li>
-            <li>Automated testing for GRC, GVM, and XSOAR modules, enhancing compliance & security.</li>
-            <li>Developed scalable POM frameworks, YAML pipelines, and parallel executions.</li>
-          </ul>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-semibold mb-2">Core Achievements</h3>
-          <ul class="list-disc list-inside text-gray-600 text-sm">
-            <li>Designed and maintained reusable automation frameworks (Selenium & Robot).</li>
-            <li>Implemented CI/CD pipelines, dashboards, and documentation in Azure DevOps.</li>
-            <li>Improved regression execution speed by 50% using Pabot parallel execution.</li>
-            <li>Automated email OTP testing and CSV data validation with Python scripts.</li>
-            <li>Received multiple awards for QA excellence, collaboration, and innovation.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- ================= Projects ================= -->
+    <section id="projects" class="py-16" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8">Highlighted Projects</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Project card 1 -->
+          <article class="group p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-xl transition-theme" data-aos="fade-up">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-xl font-semibold">End‑to‑End IAM Test Automation</h3>
+              <span class="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200">SailPoint</span>
+            </div>
+            <p class="mt-3 text-gray-600 dark:text-gray-300">Automated lifecycle & access governance flows; integrated with Azure DevOps pipelines and BrowserStack for cross‑browser runs.</p>
+            <div class="mt-4 flex gap-2 text-xs text-gray-500">
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Selenium</span>
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Robot</span>
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Azure DevOps</span>
+            </div>
+          </article>
 
-  <!-- Certifications & Awards -->
-  <section class="py-16 bg-gray-100" id="certifications">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-12">Certifications & Awards</h2>
-      <div class="grid md:grid-cols-2 gap-8 text-left">
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-semibold mb-2">Certifications</h3>
-          <ul class="list-disc list-inside text-gray-600 text-sm">
-            <li>ICT Summer Training in Machine Learning – IIT Kanpur</li>
-            <li>RPA Developer in UiPath – Edureka</li>
-          </ul>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h3 class="font-semibold mb-2">Awards</h3>
-          <ul class="list-disc list-inside text-gray-600 text-sm">
-            <li>5× Special Initiative Award</li>
-            <li>Service and Commitment Award</li>
-            <li>Best Team Award</li>
-            <li>2× Star of the Month Award</li>
-          </ul>
+          <!-- Project card 2 -->
+          <article class="group p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-xl transition-theme" data-aos="fade-up" data-aos-delay="75">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="text-xl font-semibold">CI/CD QA Pipeline</h3>
+              <span class="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200">DevOps</span>
+            </div>
+            <p class="mt-3 text-gray-600 dark:text-gray-300">Reusable pipeline templates, parallel jobs, artifacts & reports; reduced regression cycle time dramatically.</p>
+            <div class="mt-4 flex gap-2 text-xs text-gray-500">
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">GitHub Actions</span>
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Docker</span>
+              <span class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700">Allure</span>
+            </div>
+          </article>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Section -->
-  <section class="py-16" id="contact">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-6">Contact Me</h2>
-      <p class="text-lg text-gray-600 mb-6">Let’s work together 🚀</p>
-      <div class="flex flex-col md:flex-row justify-center gap-4">
-        <!-- Gmail Compose -->
-<a href="https://mail.google.com/mail/?view=cm&fs=1&to=shv.kmr0204@gmail.com" target="_blank"
-   class="bg-purple-600 text-white px-6 py-3 rounded-lg mr-4">
-   Say Hello via Gmail
-</a>
-
-<!-- Mailto -->
-<a href="mailto:shv.kmr0204@gmail.com"
-   class="bg-gray-600 text-white px-6 py-3 rounded-lg">
-   Open in Mail App
-</a>
-        <a href="https://www.linkedin.com/in/shivansh-kumar-54575b211/"
-           target="_blank"
-           class="bg-blue-600 text-white px-6 py-3 rounded-lg">
-           LinkedIn
-        </a>
+    <!-- ================= Experience ================= -->
+    <section id="experience" class="py-16 bg-gray-50 dark:bg-gray-950/40 border-y border-gray-100 dark:border-gray-800" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-8">Experience</h2>
+        <ol class="relative border-s border-gray-200 dark:border-gray-800 ml-3">
+          <li class="mb-10 ms-6" data-aos="fade-up">
+            <span class="absolute -start-3.5 flex h-7 w-7 items-center justify-center rounded-full bg-purple-600 text-white text-xs">Now</span>
+            <h3 class="text-lg font-semibold">Automation QA – IAM (TCS)</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Leading automation for access governance, building CI/CD‑ready suites, collaborating with platform & security teams.</p>
+          </li>
+          <li class="mb-2 ms-6" data-aos="fade-up" data-aos-delay="60">
+            <span class="absolute -start-3.5 mt-1 h-3.5 w-3.5 rounded-full bg-purple-400"></span>
+            <h3 class="text-lg font-semibold">SDET Intern → Full‑time</h3>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Scaled Selenium/Robot suites, API test coverage, and CI triggers for nightly & PR validations.</p>
+          </li>
+        </ol>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="py-6 text-center bg-gray-900 text-white">
-    <p>© 2025 Shivansh Kumar | Powered by GitHub Pages</p>
-  </footer>
+    <!-- ================= Contact ================= -->
+    <section id="contact" class="py-16" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold mb-4">Contact</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">Let’s work together 🚀</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="mailto:shv.kmr0204@gmail.com" class="bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700">Email Me</a>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shv.kmr0204@gmail.com" target="_blank" rel="noopener" class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">Gmail Compose</a>
+          <a href="https://www.linkedin.com/in/shivansh-kumar-4a286a1a8/" target="_blank" rel="noopener" class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">LinkedIn</a>
+        </div>
+      </div>
+    </section>
 
-</body>
+    <footer class="py-10 border-t border-gray-100 dark:border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 text-sm text-gray-500 dark:text-gray-400">
+        © <span id="year"></span> Shivansh Kumar • Built with Tailwind • Deployed on GitHub Pages
+      </div>
+    </footer>
+
+    <!-- AOS + Theme scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      // Initialize AOS for scroll animations
+      AOS.init({ once: true, duration: 700, easing: 'ease-out-quart' });
+
+      // Theme toggle with persistence
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const iconSun = document.getElementById('icon-sun');
+      const iconMoon = document.getElementById('icon-moon');
+
+      function applyIcon() {
+        const dark = root.classList.contains('dark');
+        iconSun.classList.toggle('hidden', !dark);
+        iconMoon.classList.toggle('hidden', dark);
+      }
+
+      // set initial theme based on localStorage or OS preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const stored = localStorage.getItem('theme');
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      applyIcon();
+
+      btn.addEventListener('click', () => {
+        const darkNow = !root.classList.contains('dark');
+        root.classList.toggle('dark', darkNow);
+        localStorage.setItem('theme', darkNow ? 'dark' : 'light');
+        applyIcon();
+      });
+
+      // Footer year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
 </html>
