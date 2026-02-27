@@ -1,155 +1,319 @@
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Shivansh Kumar – Story Portfolio</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shivansh Kumar – The Automation Story</title>
+    <meta name="description" content="Automation QA • IAM • DevOps CI/CD • Azure • Selenium • Robot Framework" />
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+            },
+            animation: {
+              'fill-bar': 'fillBar 1.5s ease-out forwards',
+            },
+            keyframes: {
+              fillBar: {
+                '0%': { width: '0%' },
+              }
+            }
+          },
+        },
+      };
+    </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
 
-<!-- AOS -->
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
-<style>
-body {
-  font-family: Inter, sans-serif;
-  overflow-x: hidden;
-}
+    <style>
+      /* Smooth theme transitions */
+      html, body, .transition-theme { transition: background-color .3s ease, color .3s ease, border-color .3s ease; }
+      ::selection { background: #a78bfa33; }
+      
+      /* Glassmorphism utilities */
+      .glass {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+      .dark .glass {
+        background: rgba(17, 24, 39, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      /* Fixed 3D background container */
+      #vanta-bg {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100vh;
+        z-index: -1;
+      }
 
-/* Animated Gradient Background */
-.animated-bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(-45deg, #6d28d9, #9333ea, #0ea5e9, #6366f1);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  z-index: -2;
-}
+      /* Custom Timeline Dot */
+      .timeline-dot {
+        box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.2);
+      }
+    </style>
+  </head>
 
-@keyframes gradient {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
-}
+  <body class="text-gray-800 dark:text-gray-200 antialiased relative">
+    
+    <div id="vanta-bg"></div>
 
-/* Floating particles */
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.2;
-  animation: float 20s infinite linear;
-}
+    <header class="sticky top-0 z-50 glass transition-theme border-b-0 shadow-sm">
+      <nav class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <a href="#home" class="font-extrabold tracking-tight text-xl">Shivansh<span class="text-purple-600">.</span></a>
 
-@keyframes float {
-  from { transform: translateY(100vh) }
-  to { transform: translateY(-10vh) }
-}
-</style>
-</head>
+        <div class="flex items-center gap-4">
+          <a href="#recruiter" class="hidden sm:inline-block text-sm font-semibold text-purple-600 dark:text-purple-400 hover:underline">Recruiter Mode</a>
+          <a href="#story" class="hidden sm:inline-block text-sm hover:text-purple-600 transition-colors">The Journey</a>
+          <a href="#arsenal" class="hidden sm:inline-block text-sm hover:text-purple-600 transition-colors">The Arsenal</a>
 
-<body class="text-white">
+          <button id="theme-toggle" class="ml-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-700 transition-theme shadow-sm" aria-label="Toggle dark mode">
+            <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="hidden"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 12.02l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zM19.16 6.76l1.41-1.41-1.79-1.8-1.41 1.41 1.79 1.8zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+            <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="hidden"><path d="M21.64 13A9 9 0 1111 2.36 7 7 0 0021.64 13z"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
 
-<div class="animated-bg"></div>
+    <main class="relative z-10">
+      
+      <section id="home" class="py-20 sm:py-32" data-aos="fade-up">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+          <div class="glass p-8 sm:p-10 rounded-3xl shadow-xl">
+            <div class="inline-block px-3 py-1 mb-4 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 text-sm font-semibold tracking-wide">
+              Chapter 1: The Architect
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+              I build the automation that protects digital identities.
+            </h1>
+            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              Every secure system has a story. As an Automation QA & IAM Engineer, I write the pipelines and reliable test frameworks (Selenium, Robot) that ensure Identity Access Management platforms never fail when it matters most.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#recruiter" class="px-6 py-3 rounded-xl bg-purple-600 text-white font-medium hover:bg-purple-700 shadow-lg shadow-purple-500/30 transition-all">TL;DR for Recruiters</a>
+              <a href="assets/resume.pdf" class="px-6 py-3 rounded-xl glass hover:bg-white/80 dark:hover:bg-gray-800/80 font-medium transition-all" download>Extract Resume</a>
+            </div>
+          </div>
 
-<!-- Floating particles -->
-<div id="particles"></div>
+          <div class="flex justify-center" data-aos="zoom-in" data-aos-delay="200">
+            <div class="relative w-64 h-64 sm:w-80 sm:h-80">
+              <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+              <img src="assets/WhatsApp Image 2024-11-29 at 14.33.22_fe478940.jpg" alt="Shivansh" class="relative z-10 w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white/50 dark:border-gray-800/50" />
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- HERO STORY -->
-<section class="min-h-screen flex items-center justify-center text-center px-6">
-<div data-aos="fade-up">
-<h1 class="text-6xl font-extrabold mb-6">
-My Journey in Automation
-</h1>
-<p class="text-xl max-w-2xl mx-auto">
-From manual testing to leading automation for IAM platforms — this is my story of building reliable software systems.
-</p>
-</div>
-</section>
+      <section id="recruiter" class="py-16" data-aos="fade-up">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="glass border-l-4 border-l-purple-600 rounded-2xl p-8 shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              Recruiter Quick-View
+            </h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Experience</p>
+                <p class="text-xl font-bold mt-1">3+ Years</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Current Role</p>
+                <p class="text-xl font-bold mt-1">QA Automation @ TCS</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Core Stack</p>
+                <p class="text-xl font-bold mt-1">Selenium, Robot, CI/CD</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Domain</p>
+                <p class="text-xl font-bold mt-1">IAM (SailPoint)</p>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200/50 dark:border-gray-700/50 flex flex-wrap gap-3">
+              <span class="px-3 py-1 text-sm rounded-md bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Open to Opportunities</span>
+              <span class="px-3 py-1 text-sm rounded-md bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Notice Period: 30 Days</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- STORY SECTION 1 -->
-<section class="min-h-screen flex items-center px-10">
-<div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
-<div data-aos="fade-right">
-<h2 class="text-4xl font-bold mb-4">The Beginning</h2>
-<p class="text-lg">
-I started my career exploring testing frameworks and building my first automation scripts using Selenium.
-</p>
-</div>
-<div data-aos="fade-left">
-<img src="assets/WhatsApp Image 2024-11-29 at 14.33.22_fe478940.jpg"
-class="rounded-2xl shadow-2xl"/>
-</div>
-</div>
-</section>
+      <section id="story" class="py-16" data-aos="fade-up">
+        <div class="max-w-4xl mx-auto px-6">
+          <h2 class="text-3xl font-bold mb-10 text-center">The Journey So Far</h2>
+          
+          <div class="relative border-l-2 border-purple-200 dark:border-purple-900 ml-3 md:ml-6 space-y-12">
+            
+            <div class="relative pl-8 md:pl-12" data-aos="fade-left">
+              <div class="absolute -left-[9px] top-1 w-4 h-4 bg-purple-600 rounded-full timeline-dot"></div>
+              <div class="glass p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <span class="text-sm font-bold text-purple-600 dark:text-purple-400 mb-1 block">Jan 2022 – Present</span>
+                <h3 class="text-xl font-bold">Automation QA – IAM</h3>
+                <h4 class="text-md text-gray-600 dark:text-gray-400 mb-4">Tata Consultancy Services (TCS)</h4>
+                <p class="text-gray-700 dark:text-gray-300 mb-4">
+                  The mission: Bulletproof the IAM OneAccess SailPoint application. I designed Robot Framework scripts from the ground up and wired them into Azure DevOps pipelines.
+                </p>
+                <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                  <li>Achieved ~85% automation coverage across 13 modules (705 test cases).</li>
+                  <li>Mentoring a team of 6 engineers under Agile SAFe methodology.</li>
+                </ul>
+              </div>
+            </div>
 
-<!-- STORY SECTION 2 -->
-<section class="min-h-screen flex items-center px-10">
-<div class="max-w-4xl mx-auto">
-<h2 class="text-4xl font-bold mb-6" data-aos="fade-up">
-Scaling Automation
-</h2>
-<p class="text-lg" data-aos="fade-up">
-Built enterprise-grade automation using Robot Framework and integrated it with CI/CD pipelines.
-</p>
-</div>
-</section>
+            <div class="relative pl-8 md:pl-12" data-aos="fade-left" data-aos-delay="100">
+              <div class="absolute -left-[9px] top-1 w-4 h-4 bg-gray-400 rounded-full border-2 border-white dark:border-gray-900"></div>
+              <div class="glass p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow opacity-90">
+                <span class="text-sm font-bold text-gray-500 mb-1 block">Prior</span>
+                <h3 class="text-xl font-bold">SDET Intern</h3>
+                <p class="text-gray-700 dark:text-gray-300 mt-2">
+                  Cut my teeth scaling Selenium/Robot suites, expanding API test coverage, and setting up initial CI triggers for nightly validations. The foundation was built here.
+                </p>
+              </div>
+            </div>
 
-<!-- TIMELINE -->
-<section class="min-h-screen flex items-center">
-<div class="max-w-4xl mx-auto">
-<h2 class="text-4xl font-bold text-center mb-10">
-My Experience Timeline
-</h2>
+          </div>
+        </div>
+      </section>
 
-<div class="space-y-10">
+      <section id="arsenal" class="py-16" data-aos="fade-up">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-3xl font-bold mb-10 text-center">The Arsenal</h2>
+          
+          <div class="glass p-8 rounded-3xl shadow-lg">
+            <div class="grid md:grid-cols-2 gap-8">
+              
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="font-medium text-sm">Selenium & Robot Framework</span>
+                    <span class="text-sm text-purple-600 dark:text-purple-400 font-bold">95%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-purple-600 h-2.5 rounded-full animate-fill-bar" style="width: 95%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="font-medium text-sm">Azure DevOps & CI/CD</span>
+                    <span class="text-sm text-purple-600 dark:text-purple-400 font-bold">85%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-purple-600 h-2.5 rounded-full animate-fill-bar" style="width: 85%"></div>
+                  </div>
+                </div>
+              </div>
 
-<div class="bg-white/10 backdrop-blur p-6 rounded-xl" data-aos="fade-up">
-<h3 class="text-xl font-semibold">2022 — Joined TCS</h3>
-<p>Started working on IAM SailPoint automation.</p>
-</div>
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="font-medium text-sm">IAM (SailPoint Lifecycle)</span>
+                    <span class="text-sm text-purple-600 dark:text-purple-400 font-bold">90%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-purple-600 h-2.5 rounded-full animate-fill-bar" style="width: 90%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="font-medium text-sm">API Testing & PyTest</span>
+                    <span class="text-sm text-purple-600 dark:text-purple-400 font-bold">80%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+                    <div class="bg-purple-600 h-2.5 rounded-full animate-fill-bar" style="width: 80%"></div>
+                  </div>
+                </div>
+              </div>
 
-<div class="bg-white/10 backdrop-blur p-6 rounded-xl" data-aos="fade-up">
-<h3 class="text-xl font-semibold">2024 — Automation Lead</h3>
-<p>Led automation for 700+ test cases.</p>
-</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-</div>
-</div>
-</section>
+      <section id="contact" class="py-20" data-aos="fade-up">
+        <div class="max-w-4xl mx-auto px-6 text-center glass p-12 rounded-3xl shadow-xl">
+          <h2 class="text-3xl font-bold mb-4">Ready for the Next Chapter?</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Whether you need a robust QA pipeline or a leader for your automation team, let's connect.</p>
+          <div class="flex flex-wrap gap-4 justify-center">
+            <a href="mailto:shv.kmr0204@gmail.com" class="bg-purple-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-purple-700 shadow-lg shadow-purple-500/30 transition-all">Start a Conversation</a>
+            <a href="https://www.linkedin.com/in/shivansh-kumar-4a286a1a8/" target="_blank" rel="noopener" class="px-8 py-3 rounded-xl glass font-medium hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all">LinkedIn Profile</a>
+          </div>
+        </div>
+      </section>
 
-<!-- CONTACT ENDING -->
-<section class="min-h-screen flex items-center justify-center text-center">
-<div data-aos="zoom-in">
-<h2 class="text-5xl font-bold mb-6">
-Let’s Build Something Amazing
-</h2>
-<a href="mailto:shv.kmr0204@gmail.com"
-class="bg-white text-purple-700 px-8 py-4 rounded-xl font-semibold">
-Contact Me
-</a>
-</div>
-</section>
+      <footer class="py-8 text-center text-sm text-gray-500 dark:text-gray-400 glass border-t-0 mt-10">
+        <div class="max-w-6xl mx-auto px-6">
+          © <span id="year"></span> Shivansh Kumar • The Automation Story
+        </div>
+      </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<script>
-AOS.init({ duration: 1000 });
+    </main>
 
-/* Generate floating particles */
-const container = document.getElementById("particles");
-for (let i = 0; i < 40; i++) {
-  const p = document.createElement("div");
-  p.classList.add("particle");
-  p.style.width = Math.random() * 6 + "px";
-  p.style.height = p.style.width;
-  p.style.left = Math.random() * 100 + "%";
-  p.style.animationDuration = 10 + Math.random() * 20 + "s";
-  p.style.background = "white";
-  container.appendChild(p);
-}
-</script>
+    <script>
+      // 1. Initialize AOS (Scroll Animations)
+      AOS.init({ once: true, duration: 800, easing: 'ease-out-quart' });
 
-</body>
+      // 2. Initialize Vanta.js 3D Background
+      let vantaEffect;
+      function initVanta(isDark) {
+        if (vantaEffect) vantaEffect.destroy();
+        vantaEffect = VANTA.NET({
+          el: "#vanta-bg",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x9333ea, // Tailwind Purple-600
+          backgroundColor: isDark ? 0x0f172a : 0xf8fafc, // Slate-900 or Slate-50
+          points: 10.00,
+          maxDistance: 20.00,
+          spacing: 16.00
+        });
+      }
+
+      // 3. Theme Toggle Logic
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const iconSun = document.getElementById('icon-sun');
+      const iconMoon = document.getElementById('icon-moon');
+
+      function applyTheme(isDark) {
+        root.classList.toggle('dark', isDark);
+        iconSun.classList.toggle('hidden', !isDark);
+        iconMoon.classList.toggle('hidden', isDark);
+        initVanta(isDark); // Update 3D background colors
+      }
+
+      // Initial Setup
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const stored = localStorage.getItem('theme');
+      const isDarkMode = stored === 'dark' || (!stored && prefersDark);
+      
+      applyTheme(isDarkMode);
+
+      // Toggle Button Click
+      btn.addEventListener('click', () => {
+        const darkNow = !root.classList.contains('dark');
+        localStorage.setItem('theme', darkNow ? 'dark' : 'light');
+        applyTheme(darkNow);
+      });
+
+      // 4. Footer year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
 </html>
