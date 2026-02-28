@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Martian+Mono:wght@300;400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
 <style>
 /* ════════════════════════════════════════
    VARIABLES & RESET
@@ -71,10 +70,36 @@ body {
 /* ════════════════════════════════════════
    CURSOR
 ════════════════════════════════════════ */
-#cur { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; }
-#cd  { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; position: absolute; transform: translate(-50%,-50%); }
-#cr  { width: 34px; height: 34px; border: 1.5px solid rgba(200,169,110,0.45); border-radius: 50%; position: absolute; transform: translate(-50%,-50%); transition: width .18s, height .18s, border-color .18s; }
-body.ch #cr { width: 54px; height: 54px; border-color: var(--gold); }
+body { cursor: none; }
+a, button, [onclick] { cursor: none; }
+#cur {
+  position: fixed; top: 0; left: 0;
+  z-index: 2147483647; pointer-events: none;
+  will-change: transform;
+}
+#cd {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: absolute;
+  top: 0; left: 0;
+  margin: -4px 0 0 -4px;
+}
+#cr {
+  width: 34px; height: 34px;
+  border: 1.5px solid rgba(200,169,110,0.6);
+  border-radius: 50%;
+  position: absolute;
+  top: 0; left: 0;
+  margin: -17px 0 0 -17px;
+  transition: width .18s, height .18s, margin .18s, border-color .18s, background .18s;
+}
+body.ch #cr {
+  width: 52px; height: 52px;
+  margin: -26px 0 0 -26px;
+  border-color: var(--gold);
+  background: rgba(200,169,110,0.08);
+}
 @media (max-width: 768px) { body { cursor: auto; } #cur { display: none; } }
 
 /* ════════════════════════════════════════
@@ -214,48 +239,17 @@ nav.sc {
 .btn-ghost { font-family: 'Martian Mono', monospace; font-size: .68rem; color: var(--muted); text-decoration: none; letter-spacing: .05em; transition: color .2s; }
 .btn-ghost:hover { color: var(--white); }
 
-/* ── Right pane — Spline 3D ── */
+/* ── Right pane — Three.js 3D canvas ── */
 .hero-right {
   position: relative; z-index: 3;
-  display: flex; align-items: stretch;
-  /* subtle left border separator */
-  border-left: 1px solid rgba(255,255,255,0.04);
+  border-left: 1px solid rgba(255,255,255,0.05);
+  overflow: hidden;
 }
-.hero-right::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 60% 50%, rgba(0,212,232,0.06) 0%, transparent 65%);
-  pointer-events: none; z-index: 0;
-}
-.spline-wrap {
-  width: 100%; height: 100%;
-  position: relative; z-index: 1;
-  animation: fadeIn 1.2s 0.8s both;
-}
-spline-viewer {
-  width: 100%;
-  height: 100%;
+#hero-cv {
   display: block;
-  --spline-loading-color: transparent;
-}
-/* Loading shimmer shown before Spline loads */
-.spline-loader {
+  width: 100%; height: 100%;
   position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 1rem;
-  z-index: 2; pointer-events: none;
-  animation: fadeIn 0.4s both;
 }
-.spline-loader.hidden { opacity: 0; transition: opacity 0.5s; pointer-events: none; }
-.loader-ring {
-  width: 44px; height: 44px;
-  border: 1.5px solid var(--border2);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loader-text { font-family: 'Martian Mono', monospace; font-size: .58rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
 
 /* Scroll indicator — bottom of hero left */
 .h-scroll {
@@ -596,20 +590,9 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <div class="h-scroll"><div class="h-scroll-line"></div><span>SCROLL</span></div>
   </div>
 
-  <!-- RIGHT — Spline 3D Scene -->
+  <!-- RIGHT — Three.js 3D Hero Scene -->
   <div class="hero-right">
-    <div class="spline-wrap">
-      <!-- Loading state -->
-      <div class="spline-loader" id="spline-loader">
-        <div class="loader-ring"></div>
-        <div class="loader-text">Loading 3D Scene</div>
-      </div>
-      <spline-viewer
-        url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-        events-target="global"
-        id="spline-scene">
-      </spline-viewer>
-    </div>
+    <canvas id="hero-cv"></canvas>
   </div>
 
 </section>
@@ -1014,46 +997,167 @@ const EM = 'shv.kmr0204@gmail.com';
   if (el) el.href = 'mailto:' + EM;
 });
 
-/* ══ CURSOR ══ */
-const cd = document.getElementById('cd'), cr = document.getElementById('cr');
-let mx = 0, my = 0, rx = 0, ry = 0;
+/* ══ CURSOR — simple, bulletproof ══ */
+const cd = document.getElementById('cd');
+const cr = document.getElementById('cr');
+let mx = -100, my = -100, rx = -100, ry = -100;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-document.querySelectorAll('a, button, .tl-dot').forEach(el => {
+document.querySelectorAll('a, button, .proj-card, .c-link, .tl-dot').forEach(el => {
   el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
 });
-(function tick() {
-  cd.style.left = mx + 'px'; cd.style.top = my + 'px';
-  rx += (mx - rx) * .12; ry += (my - ry) * .12;
-  cr.style.left = rx + 'px'; cr.style.top = ry + 'px';
-  requestAnimationFrame(tick);
+(function loop() {
+  cd.style.left = mx + 'px';
+  cd.style.top  = my + 'px';
+  rx += (mx - rx) * 0.13;
+  ry += (my - ry) * 0.13;
+  cr.style.left = rx + 'px';
+  cr.style.top  = ry + 'px';
+  requestAnimationFrame(loop);
 })();
 
-/* ══ SPOTLIGHT MOUSE TRACKING ══ */
-const heroEl  = document.getElementById('hero');
-const orbEl   = document.getElementById('spotlight-orb');
-heroEl.addEventListener('mousemove', e => {
-  const r = heroEl.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-  orbEl.style.left = x + 'px';
-  orbEl.style.top  = y + 'px';
-  orbEl.style.opacity = '1';
-});
-heroEl.addEventListener('mouseleave', () => { orbEl.style.opacity = '0'; });
-
-/* ══ SPLINE LOADER HIDE ══ */
-const splineEl  = document.getElementById('spline-scene');
-const loaderEl  = document.getElementById('spline-loader');
-if (splineEl) {
-  splineEl.addEventListener('load', () => {
-    if (loaderEl) { loaderEl.classList.add('hidden'); setTimeout(() => loaderEl.remove(), 600); }
+/* ══ SPOTLIGHT ORB ══ */
+(function() {
+  const hero = document.getElementById('hero');
+  const orb  = document.getElementById('spotlight-orb');
+  if (!hero || !orb) return;
+  document.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+      orb.style.left = (e.clientX - r.left) + 'px';
+      orb.style.top  = (e.clientY - r.top)  + 'px';
+      orb.style.opacity = '1';
+    } else {
+      orb.style.opacity = '0';
+    }
   });
-  /* Fallback: hide loader after 8s regardless */
-  setTimeout(() => { if (loaderEl) loaderEl.classList.add('hidden'); }, 8000);
-}
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('sc', scrollY > 60);
+})();
+
+/* ══ HERO 3D SCENE (Three.js on #hero-cv) ══ */
+(function() {
+  const cv = document.getElementById('hero-cv');
+  if (!cv) return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas: cv, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
+  cam.position.set(0, 0, 22);
+
+  function resize() {
+    const w = cv.clientWidth, h = cv.clientHeight;
+    renderer.setSize(w, h, false);
+    cam.aspect = w / h;
+    cam.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  /* ── Central torus knot (the 3D "hero object") ── */
+  const torusGeo = new THREE.TorusKnotGeometry(3.2, 0.9, 180, 20, 2, 3);
+  const torusMat = new THREE.MeshBasicMaterial({
+    color: 0xc8a96e, wireframe: true, transparent: true, opacity: 0.22
+  });
+  const torus = new THREE.Mesh(torusGeo, torusMat);
+  scene.add(torus);
+
+  /* Inner solid torus — subtle fill */
+  const innerMat = new THREE.MeshBasicMaterial({
+    color: 0x00d4e8, wireframe: true, transparent: true, opacity: 0.10
+  });
+  const inner = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(3.2, 0.9, 80, 10, 2, 3), innerMat
+  );
+  scene.add(inner);
+
+  /* ── Orbiting particles around the knot ── */
+  const ORBS = 260;
+  const orbPos = new Float32Array(ORBS * 3);
+  const orbCol = new Float32Array(ORBS * 3);
+  const orbData = [];
+  for (let i = 0; i < ORBS; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.random() * Math.PI * 2;
+    const r     = 5.5 + Math.random() * 4.5;
+    orbData.push({ r, theta, phi, speed: (Math.random() - 0.5) * 0.008, vy: (Math.random() - 0.5) * 0.006 });
+    orbPos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+    orbPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    orbPos[i*3+2] = r * Math.cos(phi);
+    const gold = Math.random() > 0.45;
+    orbCol[i*3]   = gold ? 0.78 : 0.0;
+    orbCol[i*3+1] = gold ? 0.66 : 0.83;
+    orbCol[i*3+2] = gold ? 0.43 : 0.91;
+  }
+  const orbGeo = new THREE.BufferGeometry();
+  const orbPosAttr = new THREE.BufferAttribute(orbPos, 3);
+  orbGeo.setAttribute('position', orbPosAttr);
+  orbGeo.setAttribute('color', new THREE.BufferAttribute(orbCol, 3));
+  const orbMat = new THREE.PointsMaterial({ size: 0.08, vertexColors: true, transparent: true, opacity: 0.85 });
+  const orbPoints = new THREE.Points(orbGeo, orbMat);
+  scene.add(orbPoints);
+
+  /* ── Outer particle halo ── */
+  const HALO = 900;
+  const hPos = new Float32Array(HALO * 3);
+  const hCol = new Float32Array(HALO * 3);
+  for (let i = 0; i < HALO; i++) {
+    hPos[i*3]   = (Math.random() - 0.5) * 38;
+    hPos[i*3+1] = (Math.random() - 0.5) * 38;
+    hPos[i*3+2] = (Math.random() - 0.5) * 22;
+    const g = Math.random() > 0.5;
+    hCol[i*3]   = g ? 0.78 : 0.0;
+    hCol[i*3+1] = g ? 0.66 : 0.83;
+    hCol[i*3+2] = g ? 0.43 : 0.91;
+  }
+  const hGeo = new THREE.BufferGeometry();
+  hGeo.setAttribute('position', new THREE.BufferAttribute(hPos, 3));
+  hGeo.setAttribute('color',    new THREE.BufferAttribute(hCol, 3));
+  const halo = new THREE.Points(hGeo,
+    new THREE.PointsMaterial({ size: 0.055, vertexColors: true, transparent: true, opacity: 0.4 }));
+  scene.add(halo);
+
+  /* ── Mouse parallax ── */
+  let tx = 0, ty = 0;
+  document.addEventListener('mousemove', e => {
+    tx = (e.clientX / window.innerWidth  - 0.5) * 2.8;
+    ty = (e.clientY / window.innerHeight - 0.5) * 2.8;
+  });
+
+  let t = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    t += 0.008;
+
+    /* Rotate main knot */
+    torus.rotation.x += 0.004;
+    torus.rotation.y += 0.006;
+    inner.rotation.x -= 0.003;
+    inner.rotation.z += 0.005;
+
+    /* Animate orbiting particles */
+    for (let i = 0; i < ORBS; i++) {
+      orbData[i].theta += orbData[i].speed;
+      orbData[i].phi   += orbData[i].vy;
+      const { r, theta, phi } = orbData[i];
+      orbPosAttr.array[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+      orbPosAttr.array[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+      orbPosAttr.array[i*3+2] = r * Math.cos(phi);
+    }
+    orbPosAttr.needsUpdate = true;
+
+    /* Slow halo drift */
+    halo.rotation.y += 0.001;
+
+    /* Mouse parallax on whole scene */
+    scene.rotation.y += (tx * 0.04 - scene.rotation.y) * 0.04;
+    scene.rotation.x += (ty * 0.04 - scene.rotation.x) * 0.04;
+
+    renderer.render(scene, cam);
+  })();
+})();
+
+
   /* Animate timeline spine based on scroll progress through timeline section */
   const tl = document.getElementById('timeline');
   const tlf = document.getElementById('tlf');
