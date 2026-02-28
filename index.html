@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Martian+Mono:wght@300;400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
 <style>
 /* ════════════════════════════════════════
    VARIABLES & RESET
@@ -125,12 +126,51 @@ nav.sc {
 @media (max-width: 900px) { .n-links a { display: none; } nav { padding: 1rem 1.5rem; } }
 
 /* ════════════════════════════════════════
-   HERO
+   HERO — SPLIT LAYOUT
 ════════════════════════════════════════ */
 #hero {
   min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* ── Spotlight Effect ── */
+.hero-spotlight {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  overflow: hidden;
+}
+.spotlight-svg {
+  position: absolute;
+  top: -40%; left: -10%;
+  width: 140%; height: 180%;
+  opacity: 0;
+  animation: spotlight-in 1.2s 0.6s ease both;
+}
+@keyframes spotlight-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Mouse-tracking spotlight orb */
+.spotlight-orb {
+  position: absolute;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(200,169,110,0.13) 0%, rgba(0,212,232,0.06) 40%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+  filter: blur(40px);
+  opacity: 0;
+}
+
+/* ── Left pane ── */
+.hero-left {
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 0 3rem 5rem; position: relative; z-index: 2;
+  padding: 0 3.5rem 5.5rem;
+  position: relative; z-index: 3;
 }
 .h-eyebrow {
   font-family: 'Martian Mono', monospace; font-size: .62rem;
@@ -141,14 +181,14 @@ nav.sc {
 .h-eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
 .h-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(3.5rem, 8vw, 8.5rem);
+  font-size: clamp(2.8rem, 5.5vw, 7rem);
   line-height: .92; letter-spacing: -.03em; color: var(--white);
   animation: fadeUp 1s 0.4s both;
 }
 .h-title em { font-style: italic; color: var(--gold); }
 .h-sub {
-  margin-top: 2.5rem; font-size: 1rem; color: var(--muted);
-  max-width: 480px; line-height: 1.8;
+  margin-top: 2rem; font-size: .95rem; color: var(--muted);
+  max-width: 420px; line-height: 1.8;
   animation: fadeUp 0.8s 0.7s both;
 }
 .h-sub strong { color: var(--text); }
@@ -168,15 +208,84 @@ nav.sc {
 }
 .type-cur { display: inline-block; width: 2px; height: .8em; background: var(--gold); vertical-align: middle; animation: blink-cur 1s step-end infinite; margin-left: 1px; }
 @keyframes blink-cur { 0%,100%{opacity:1} 50%{opacity:0} }
-.h-acts { margin-top: 2.8rem; display: flex; align-items: center; gap: 2rem; animation: fadeUp 0.8s 1s both; }
+.h-acts { margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem; animation: fadeUp 0.8s 1s both; }
 .btn-gold { padding: .9rem 2.5rem; background: var(--gold); color: var(--ink); font-family: 'Martian Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-decoration: none; display: inline-block; transition: transform .2s, box-shadow .2s; }
 .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(200,169,110,.45); }
 .btn-ghost { font-family: 'Martian Mono', monospace; font-size: .68rem; color: var(--muted); text-decoration: none; letter-spacing: .05em; transition: color .2s; }
 .btn-ghost:hover { color: var(--white); }
-.h-scroll { position: absolute; bottom: 2.5rem; right: 3rem; display: flex; flex-direction: column; align-items: center; gap: .4rem; font-family: 'Martian Mono', monospace; font-size: .52rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); animation: fadeIn 1s 1.5s both; }
-.h-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--muted), transparent); animation: scroll-bounce 2.5s ease-in-out infinite; }
-@keyframes scroll-bounce { 0%,100%{opacity:.5;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(.6)} }
-@media (max-width: 768px) { #hero { padding: 0 1.5rem 4rem; } }
+
+/* ── Right pane — Spline 3D ── */
+.hero-right {
+  position: relative; z-index: 3;
+  display: flex; align-items: stretch;
+  /* subtle left border separator */
+  border-left: 1px solid rgba(255,255,255,0.04);
+}
+.hero-right::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, rgba(0,212,232,0.06) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+.spline-wrap {
+  width: 100%; height: 100%;
+  position: relative; z-index: 1;
+  animation: fadeIn 1.2s 0.8s both;
+}
+spline-viewer {
+  width: 100%;
+  height: 100%;
+  display: block;
+  --spline-loading-color: transparent;
+}
+/* Loading shimmer shown before Spline loads */
+.spline-loader {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1rem;
+  z-index: 2; pointer-events: none;
+  animation: fadeIn 0.4s both;
+}
+.spline-loader.hidden { opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+.loader-ring {
+  width: 44px; height: 44px;
+  border: 1.5px solid var(--border2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-family: 'Martian Mono', monospace; font-size: .58rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+
+/* Scroll indicator — bottom of hero left */
+.h-scroll {
+  position: absolute; bottom: 2.5rem; left: 3.5rem;
+  display: flex; align-items: center; gap: .6rem;
+  font-family: 'Martian Mono', monospace; font-size: .52rem;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+  animation: fadeIn 1s 1.6s both;
+}
+.h-scroll-line { width: 40px; height: 1px; background: linear-gradient(to right, var(--muted), transparent); animation: scroll-bounce 2.5s ease-in-out infinite; }
+@keyframes scroll-bounce { 0%,100%{opacity:.5;transform:scaleX(1)} 50%{opacity:1;transform:scaleX(.7)} }
+
+/* Corner badge */
+.hero-badge {
+  position: absolute; top: 50%; right: 0; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: .3rem; padding: 1.5rem 0; z-index: 4;
+  border-left: 1px solid var(--border);
+  animation: fadeIn 1s 1.4s both;
+}
+.badge-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); animation: blink-dot 2.5s infinite; }
+.badge-text { font-family: 'Martian Mono', monospace; font-size: .5rem; letter-spacing: .18em; color: var(--muted); writing-mode: vertical-rl; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  #hero { grid-template-columns: 1fr; grid-template-rows: auto 55vw; }
+  .hero-left { padding: 7rem 1.5rem 3rem; justify-content: flex-start; }
+  .hero-right { border-left: none; border-top: 1px solid rgba(255,255,255,0.04); min-height: 55vw; }
+  .h-scroll { left: 1.5rem; }
+  .hero-badge { display: none; }
+}
 
 /* ════════════════════════════════════════
    STATS BAR
@@ -439,28 +548,70 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
     <button class="n-rec" id="rec-btn" onclick="toggleRec()"><span class="dot"></span>RECRUITER MODE</button>
-    <a href="assets/Updated Resume.pdf" class="n-dl" download>↓ RESUME</a>
+    <a href="Updated_Resume.pdf" class="n-dl" download>↓ RESUME</a>
   </div>
 </nav>
 
 <!-- ══════════════════ HERO ══════════════════ -->
 <section id="hero">
-  <div class="h-eyebrow">Shivansh Kumar &middot; Portfolio 2025</div>
-  <h1 class="h-title">
-    Breaking Bugs<br>
-    <em>Before</em> They<br>
-    Break <em>Production.</em>
-  </h1>
-  <p class="h-sub">
-    <strong>QA Automation Engineer at Tata Consultancy Services</strong> — leading enterprise identity security testing for Ernst &amp; Young's global IAM platforms, based in Budapest, Hungary.
-  </p>
-  <div class="h-loc">Budapest, Hungary &nbsp;&middot;&nbsp; Open to new opportunities</div>
-  <div class="h-type-line"><span id="tw"></span><span class="type-cur"></span></div>
-  <div class="h-acts">
-    <a href="#story" class="btn-gold">READ MY STORY</a>
-    <a href="#projects" class="btn-ghost">↓ View Projects</a>
+
+  <!-- Aceternity-style SVG Spotlight -->
+  <div class="hero-spotlight" id="hero-spotlight">
+    <svg class="spotlight-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3787 2842" fill="none">
+      <g filter="url(#sfilter)">
+        <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501"
+          transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+          fill="white" fill-opacity="0.06"/>
+      </g>
+      <defs>
+        <filter id="sfilter" x="0.86" y="0.84" width="3785.16" height="2840.26"
+          filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+          <feGaussianBlur stdDeviation="151" result="effect1_foregroundBlur"/>
+        </filter>
+      </defs>
+    </svg>
+    <!-- Mouse-following glow orb -->
+    <div class="spotlight-orb" id="spotlight-orb"></div>
   </div>
-  <div class="h-scroll"><span>SCROLL</span><div class="h-scroll-line"></div></div>
+
+  <!-- LEFT — Text content -->
+  <div class="hero-left">
+    <div class="h-eyebrow">Shivansh Kumar &middot; Portfolio 2025</div>
+    <h1 class="h-title">
+      Breaking Bugs<br>
+      <em>Before</em> They<br>
+      Break <em>Production.</em>
+    </h1>
+    <p class="h-sub">
+      <strong>QA Automation Engineer at Tata Consultancy Services</strong> — leading enterprise identity security testing for Ernst &amp; Young's global IAM platforms, based in Budapest, Hungary.
+    </p>
+    <div class="h-loc">Budapest, Hungary &nbsp;&middot;&nbsp; Open to new opportunities</div>
+    <div class="h-type-line"><span id="tw"></span><span class="type-cur"></span></div>
+    <div class="h-acts">
+      <a href="#story" class="btn-gold">READ MY STORY</a>
+      <a href="#projects" class="btn-ghost">↓ View Projects</a>
+    </div>
+    <div class="h-scroll"><div class="h-scroll-line"></div><span>SCROLL</span></div>
+  </div>
+
+  <!-- RIGHT — Spline 3D Scene -->
+  <div class="hero-right">
+    <div class="spline-wrap">
+      <!-- Loading state -->
+      <div class="spline-loader" id="spline-loader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">Loading 3D Scene</div>
+      </div>
+      <spline-viewer
+        url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+        events-target="global"
+        id="spline-scene">
+      </spline-viewer>
+    </div>
+  </div>
+
 </section>
 
 <!-- ══════════════════ STATS ══════════════════ -->
@@ -492,7 +643,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
         <div class="pm-role">QA AUTOMATION ENGINEER<br>TCS &middot; CLIENT: ERNST &amp; YOUNG &middot; BUDAPEST</div>
         <div class="pm-table">
           <div class="pm-row"><span class="k">LOCATION</span><span class="v">Budapest, Hungary</span></div>
-          <div class="pm-row"><span class="k">EMAIL</span><span class="v"><a id="eml1" href="#">shv.kmr0204@gmail.com</a></span></div>
+          <div class="pm-row"><span class="k">EMAIL</span><span class="v"><a id="eml1" href="#"><span class="__cf_email__" data-cfemail="1d6e756b3376706f2d2f2d295d7a707c7471337e7270">[email&#160;protected]</span></a></span></div>
           <div class="pm-row"><span class="k">PHONE</span><span class="v">+91-8969871676</span></div>
           <div class="pm-row"><span class="k">LINKEDIN</span><span class="v"><a href="https://www.linkedin.com/in/shivansh-kumar-4a286a1a8/" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Shivansh Kumar ↗</a></span></div>
           <div class="pm-row"><span class="k">STATUS</span><span class="v"><span class="open-badge">OPEN TO WORK</span></span></div>
@@ -802,7 +953,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
         <li>DevOps QA Engineer (CI/CD-focused)</li>
         <li>Remote-first or hybrid international setups</li>
         <li>Open to relocation &mdash; currently in Budapest, Hungary</li>
-        <li>Contact: <a id="eml3" href="#" style="color:var(--gold)">shv.kmr0204@gmail.com</a></li>
+        <li>Contact: <a id="eml3" href="#" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="37445f41195c5a450705070377505a565e5b1954585a">[email&#160;protected]</span></a></li>
       </ul>
     </div>
   </div>
@@ -819,7 +970,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
       <p class="c-sub">Whether you're looking to level up QA automation, scale IAM testing, or just want to talk CI/CD pipelines &mdash; I'm always up for a great conversation.</p>
       <div class="c-links">
         <a id="eml2" href="#" class="c-link">
-          <div><div class="cl-label">Email Me Directly</div><div class="cl-sub">shv.kmr0204@gmail.com</div></div>
+          <div><div class="cl-label">Email Me Directly</div><div class="cl-sub"><span class="__cf_email__" data-cfemail="285b405e0643455a181a181c684f45494144064b4745">[email&#160;protected]</span></div></div>
           <span class="cl-arr">&#8599;</span>
         </a>
         <a href="https://www.linkedin.com/in/shivansh-kumar-4a286a1a8/" target="_blank" rel="noopener" class="c-link">
@@ -855,7 +1006,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   <div class="f-copy">&copy; <span id="yr"></span> &nbsp;&middot;&nbsp; QA Automation Engineer &nbsp;&middot;&nbsp; Budapest, Hungary</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══ EMAIL LINKS (set via JS - no obfuscation) ══ */
 const EM = 'shv.kmr0204@gmail.com';
 ['eml1','eml2','eml3'].forEach(id => {
@@ -878,7 +1029,29 @@ document.querySelectorAll('a, button, .tl-dot').forEach(el => {
   requestAnimationFrame(tick);
 })();
 
-/* ══ NAV SCROLL ══ */
+/* ══ SPOTLIGHT MOUSE TRACKING ══ */
+const heroEl  = document.getElementById('hero');
+const orbEl   = document.getElementById('spotlight-orb');
+heroEl.addEventListener('mousemove', e => {
+  const r = heroEl.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  orbEl.style.left = x + 'px';
+  orbEl.style.top  = y + 'px';
+  orbEl.style.opacity = '1';
+});
+heroEl.addEventListener('mouseleave', () => { orbEl.style.opacity = '0'; });
+
+/* ══ SPLINE LOADER HIDE ══ */
+const splineEl  = document.getElementById('spline-scene');
+const loaderEl  = document.getElementById('spline-loader');
+if (splineEl) {
+  splineEl.addEventListener('load', () => {
+    if (loaderEl) { loaderEl.classList.add('hidden'); setTimeout(() => loaderEl.remove(), 600); }
+  });
+  /* Fallback: hide loader after 8s regardless */
+  setTimeout(() => { if (loaderEl) loaderEl.classList.add('hidden'); }, 8000);
+}
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('sc', scrollY > 60);
   /* Animate timeline spine based on scroll progress through timeline section */
@@ -1098,15 +1271,4 @@ function activateDot(el) {
 
 /* ══ RECRUITER MODE ══ */
 function toggleRec() {
-  const sec = document.getElementById('rec-sec');
-  const btn = document.getElementById('rec-btn');
-  const on = sec.classList.toggle('on');
-  btn.classList.toggle('on', on);
-  if (on) setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
-}
-
-/* ══ FOOTER YEAR ══ */
-document.getElementById('yr').textContent = new Date().getFullYear();
-</script>
-</body>
-</html>
+  con
